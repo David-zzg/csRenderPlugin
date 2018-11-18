@@ -1,10 +1,10 @@
 const csIf = require('../libs/csIf');
 
 
-function render(content, variable,callback,endCallback) {
-    let touch = false;
+function render(content, variable) {
+    let match = false;
     const result = csIf.parse(content, (obj) => {
-        touch = true;
+        match = true;
         with (variable) {
             if (!Array.isArray(obj.value)) {
                 return `解析if失败`;
@@ -22,10 +22,10 @@ function render(content, variable,callback,endCallback) {
             return `if条件无匹配项`
         }
     });
-    if(result){
-        return callback && callback(result);
+    return {
+        match,
+        result
     }
-    endCallback && endCallback(content);
 }
 
 module.exports = render;

@@ -21,6 +21,20 @@ function readCsContent(content, {basePath}) {
     })
 }
 
+function renderContent(content, {basePath}) {
+    let match = false;
+    const result =  csInclude.parse(content, (obj) => {
+        const filePath = path.join(basePath,obj.value);
+        return readFile(filePath,`找不到文件${filePath}`);
+    });
+    return {
+        match,
+        result
+    }
+}
+
 module.exports = {
-    readCsFile
+    readCsFile,
+    readCsContent,
+    renderContent
 }

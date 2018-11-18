@@ -87,19 +87,58 @@ G_speedPointTime[1] = (new Date()).getTime();       /*进入页面*/
 
 
 var content = `}
-    var fen2Yuan = <?cs var:Language ?>`;
+    var fen2Yuan = <?cs var:Language ?>
+    <?cs if:('zh_cn' == Language)?>
+       lgdata = <?cs include:PARSE_PATH("/i18n/wallet/zh_cn/base.json") ?>;
+  <?cs elif ('zh_hk' == Language || 'zh_tw' == Language)?>
+       lgdata = <?cs include:PARSE_PATH("/i18n/wallet/zh_hk/base.json") ?>;
+  <?cs elif ('en' == Language)?>
+       lgdata = <?cs include:PARSE_PATH("/i18n/wallet/en/base.json") ?>;
+  <?cs else ?>
+       lgdata = <?cs include:PARSE_PATH("/i18n/wallet/en/base.json") ?>;
+  <?cs /if ?>
+    
+     //绑卡信息
+    <?cs each:item = array_bind_card ?>
+    para.bindCards.payment_methods.push({
+        req_time:"<?cs var:item.req_time ?>",//绑卡申请时间
+        charge_type:"<?cs var:item.charge_type ?>",//绑卡充值类型，1为DDA卡，0为正常卡
+        bind_status:"<?cs var:item.bind_status ?>",//绑卡类型，3为正常绑卡，1为DDA卡提交申请，2为DDA卡金额验证，45为DDA卡银行待处理
+         bank_name:"<?cs var:item.bank_name ?>",
+         card_expiry: "<?cs var:item.card_expiry ?>",
+         card_number: "<?cs var:item.card_number ?>",
+         cvv_length:"<?cs var:item.cvv_length ?>",
+         defaultPM:"<?cs var:item.defaultPM ?>",
+         description: "<?cs var:item.description ?>",
+         information:"<?cs var:item.information ?>",
+         instrument:"<?cs var:item.instrument ?>",
+         name_on_card:"<?cs var:item.name_on_card ?>",
+         payment_id:"<?cs var:item.payment_id ?>",
+         verified:"<?cs var:item.verified ?>",
+         issue_bank:"<?cs var:item.issue_bank ?>"
+    })
+   <?cs /each ?>
+   aaa
+    
+    `;
 
 
-renderObj.renderContent(content,{
-    Language:'zh_cn'
-},(result)=>{
-    console.log(result);
+const final = renderObj.renderContent(content,{
+    variable:{
+        Language:'zh_cn',
+        array_bind_card:[{},{}]
+    },
+    config:{
+        basePath:'aa'
+    }
 });
+console.log(final);
 
 return;
 
 const result = csIf(content, {
-    Language:'zh_cn'
+    Language:'zh_cn',
+    array_bind_card:[{},{}]
 });
 console.log(result);
 return;

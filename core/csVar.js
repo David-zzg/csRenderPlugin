@@ -1,17 +1,21 @@
 const parse = require('../libs/csVar');
 
-function render(content, variable, callback,endCallback) {
-    let touch = false;
+function render(content, variable) {
+    let match = false;
     const result = parse.parse(content, (obj) => {
-        touch = true;
+        match = true;
         with (variable) {
-            return eval(obj.value);
+            try{
+                return eval(obj.value);
+            }catch (e){
+                return `解析${obj.value}失败`;
+            }
         }
     });
-    if (touch) {
-        return callback && callback(result);
+    return {
+        match,
+        result
     }
-    endCallback && endCallback(content);
 }
 
 module.exports = render;
