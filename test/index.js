@@ -5,7 +5,7 @@ const csIf = require('../core/csIf');
 const render = require('../core/csInclude');
 const csFor = require('../core/csFor');
 const path = require('path');
-const renderObj = require('../core/render')
+const renderObj = require('../index');
 
 var content = `<!DOCTYPE html>
 <html>
@@ -126,7 +126,7 @@ var content = `}
 const final = renderObj.renderContent(content,{
     variable:{
         Language:'zh_cn',
-        array_bind_card:[{},{}]
+        array_bind_card:[{req_time:'aaa'},{}]
     },
     config:{
         basePath:'aa'
